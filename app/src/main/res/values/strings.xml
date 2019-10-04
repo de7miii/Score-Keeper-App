@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">BasketballScoresApp</string>
+    <string name="two_point_btn_text">2-Point</string>
+    <string name="three_point_btn_text">3-Point</string>
+    <string name="free_throw_btn_text">Free Throw</string>
+    <string name="foul_btn_text">Commit Foul</string>
+    <string name="reset_btn_text">Reset</string>
+    <string name="shot_clock_text">Shot Clock</string>
+    <string name="team_fouls_text">Team Fouls</string>
+    <string name="first_qrtr_text">1</string>
+    <string name="second_qrtr_text">2</string>
+    <string name="third_qrtr_text">3</string>
+    <string name="fourth_qrtr_text">4</string>
+</resources>
