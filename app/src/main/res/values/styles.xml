@@ -14,11 +14,7 @@
 
     <style name="QrtrTextUnselectedStyle">
         <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/darkGrey</item>
-    </style>
-    <style name="QrtrTextSelectedStyle">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/selectedRed</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>
