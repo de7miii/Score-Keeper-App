@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Team homeTeam;
     private Team awayTeam;
     private TextView qrtrTime;
-//    private TextView shotClk;
+    private TextView shotClk;
     private TextView homeScore;
     private TextView awayScore;
     private TextView homeFouls;
@@ -27,13 +27,15 @@ public class MainActivity extends AppCompatActivity {
     private CountDownTimer qrtrTimeTimer;
     private int currentQrtr = 1;
 
+    private CountDownTimer shotClockkTimer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         qrtrTime = findViewById(R.id.quarter_time_text);
-//        shotClk = findViewById(R.id.shot_clock_text);
+        shotClk = findViewById(R.id.shot_clock_text);
         homeScore = findViewById(R.id.home_team_score);
         awayScore = findViewById(R.id.away_team_score);
         homeFouls = findViewById(R.id.home_team_fouls);
@@ -142,6 +144,33 @@ public class MainActivity extends AppCompatActivity {
             }
         }.start();
 
+        shotClockkTimer = new CountDownTimer(24000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) millisUntilFinished /1000;
+                StringBuilder time = new StringBuilder();
+                time.append(":");
+                if (seconds < 10){
+                    time.append(0);
+                    time.append(seconds);
+                }else{
+                    time.append(seconds);
+                }
+                shotClk.setText(time);
+            }
+
+            @Override
+            public void onFinish() {
+                start();
+            }
+        }.start();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     public void updateQrtrText(int qrtr){
@@ -228,6 +257,7 @@ public class MainActivity extends AppCompatActivity {
         foulsString.append(awayTeam.getFouls());
         awayFouls.setText(foulsString);
     }
+
     private void reset(){
         updateHomeTeamScore(0);
         updateHomeTeamFouls(0);
@@ -237,5 +267,7 @@ public class MainActivity extends AppCompatActivity {
         updateQrtrText(currentQrtr);
         qrtrTimeTimer.onTick(720000);
         qrtrTimeTimer.start();
+        shotClockkTimer.onTick(24000);
+        shotClockkTimer.start();
     }
 }

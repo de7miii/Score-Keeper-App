@@ -3,14 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
-
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -22,6 +23,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="16dp"
                 android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
                 <TextView
@@ -29,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Home"
+                    android:text="@string/home_team_default_name"
                     style="@style/HeaderTextStyle" />
                 <TextView
                     android:id="@+id/home_team_score"
@@ -38,7 +40,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
                     android:textSize="24sp"
-                    android:text="0"/>
+                    android:text="@string/home_team_default_score"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,7 +54,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:textSize="24sp"
-                    android:text="0"/>
+                    android:text="@string/home_team_default_fouls"/>
             </LinearLayout>
 
             <LinearLayout
@@ -62,6 +64,7 @@
                 android:orientation="vertical"
                 android:layout_marginTop="16dp"
                 android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
                 <TextView
@@ -70,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     style="@style/HeaderTextStyle"
-                    android:text="Away" />
+                    android:text="@string/away_team_default_name" />
 
                 <TextView
                     android:id="@+id/away_team_score"
@@ -79,7 +82,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
                     android:textSize="24sp"
-                    android:text="0"/>
+                    android:text="@string/away_team_default_score"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -93,7 +96,7 @@
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
                     android:textSize="24sp"
-                    android:text="0"/>
+                    android:text="@string/away_team_default_fouls"/>
             </LinearLayout>
 
             <LinearLayout
@@ -109,7 +112,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="12:00"
+                    android:text="@string/default_qurter_time"
                     style="@style/HeaderTextStyle"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -150,18 +153,18 @@
                         android:layout_marginLeft="2dp"
                         style="@style/QrtrTextUnselectedStyle"/>
                 </LinearLayout>
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:layout_marginTop="8dp"-->
-<!--                    android:text="@string/shot_clock_text"/>-->
-<!--                <TextView-->
-<!--                    android:id="@+id/shot_clock_text"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    android:text="24"-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/shot_clock_text"/>
+                <TextView
+                    android:id="@+id/shot_clock_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/default_shot_clock"
                     style="@style/HeaderTextStyle"/>
             </LinearLayout>
 
@@ -212,7 +215,8 @@
                 android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/court"/>
+                android:src="@drawable/court"
+                android:contentDescription="@string/court_image_description" />
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
