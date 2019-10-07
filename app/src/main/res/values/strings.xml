@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BasketballScoresApp</string>
+    <string name="app_name">Basketball Score</string>
     <string name="two_point_btn_text">2-Point</string>
     <string name="three_point_btn_text">3-Point</string>
     <string name="free_throw_btn_text">Free Throw</string>
@@ -21,4 +21,6 @@
     <string name="away_team_default_fouls">0</string>
     <string name="court_image_description">Court Image</string>
     <string name="default_shot_clock">:24</string>
+    <string name="start_btn_text">Start</string>
+    <string name="pause_btn_text">Pause</string>
 </resources>

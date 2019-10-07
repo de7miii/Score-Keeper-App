@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int INITIAL_QRTR_TIME = 720000; // 12 minutes
+    private final int INITIAL_SHOT_CLOCK_TIME = 24000; // 24 seconds
+
     private Team homeTeam;
     private Team awayTeam;
     private TextView qrtrTime;
@@ -23,12 +26,17 @@ public class MainActivity extends AppCompatActivity {
     private TextView secondQrtr;
     private TextView thirdQrtr;
     private TextView fourthQrtr;
+    private Button mStartPauseBtn;
 
     private CountDownTimer qrtrTimeTimer;
     private int currentQrtr = 1;
 
-    private CountDownTimer shotClockkTimer;
+    private CountDownTimer shotClockTimer;
 
+    private boolean isStarted = false;
+
+    private int mShotClockTimeLeftInMilli = INITIAL_SHOT_CLOCK_TIME;
+    private int mQrtrTimeLeftInMilli = INITIAL_QRTR_TIME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Button threePointAwayBtn = findViewById(R.id.three_point_away_btn);
         Button freeThrowAwayBtn = findViewById(R.id.free_throw_away_btn);
         Button foulAwayBtn = findViewById(R.id.foul_away_btn);
+        mStartPauseBtn = findViewById(R.id.start_btn);
         Button resetBtn = findViewById(R.id.reset_btn);
 
         initializeData();
@@ -59,24 +68,28 @@ public class MainActivity extends AppCompatActivity {
         twoPointHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateHomeTeamScore(2);
             }
         });
         threePointHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateHomeTeamScore(3);
             }
         });
         freeThrowHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateHomeTeamScore(1);
             }
         });
         foulHomeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateHomeTeamFouls(1);
             }
         });
@@ -84,24 +97,28 @@ public class MainActivity extends AppCompatActivity {
         twoPointAwayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateAwayTeamScore(2);
             }
         });
         threePointAwayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateAwayTeamScore(3);
             }
         });
         freeThrowAwayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateAwayTeamScore(1);
             }
         });
         foulAwayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (isStarted)
                 updateAwayTeamFouls(1);
             }
         });
@@ -115,62 +132,17 @@ public class MainActivity extends AppCompatActivity {
         updateQrtrText(currentQrtr);
 
         // Change millisInFuture (the first argument in CountDownTimer() ) to 5000 (5s) for testing.
-        qrtrTimeTimer = new CountDownTimer(720000,1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int minutes = (int)millisUntilFinished/60000 ;
-                int seconds = (int)millisUntilFinished%60000/1000;
-                StringBuilder time = new StringBuilder();
-                time.append(minutes);
-                time.append(":");
-                if (seconds<10){
-                    time.append(0);
-                    time.append(seconds);
-                }else{
-                    time.append(seconds);
-                }
-                qrtrTime.setText(time);
-            }
 
+        mStartPauseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFinish() {
-                if (currentQrtr < 4){
-                    currentQrtr += 1;
-                    updateQrtrText(currentQrtr);
-                    start();
+            public void onClick(View v) {
+                if (!isStarted){
+                    startTimers();
                 }else{
-                    reset();
+                    pauseTimers();
                 }
             }
-        }.start();
-
-        shotClockkTimer = new CountDownTimer(24000, 1000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                int seconds = (int) millisUntilFinished /1000;
-                StringBuilder time = new StringBuilder();
-                time.append(":");
-                if (seconds < 10){
-                    time.append(0);
-                    time.append(seconds);
-                }else{
-                    time.append(seconds);
-                }
-                shotClk.setText(time);
-            }
-
-            @Override
-            public void onFinish() {
-                start();
-            }
-        }.start();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
+        });
     }
 
     public void updateQrtrText(int qrtr){
@@ -258,16 +230,91 @@ public class MainActivity extends AppCompatActivity {
         awayFouls.setText(foulsString);
     }
 
+    private void startTimers(){
+        isStarted = true;
+        mStartPauseBtn.setText(R.string.pause_btn_text);
+        qrtrTimeTimer = new CountDownTimer(mQrtrTimeLeftInMilli,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mQrtrTimeLeftInMilli = (int) millisUntilFinished;
+                updateQrtrTimeTimerText();
+            }
+
+            @Override
+            public void onFinish() {
+                if (currentQrtr < 4){
+                    currentQrtr += 1;
+                    updateQrtrText(currentQrtr);
+                    start();
+                }else{
+                    reset();
+                }
+            }
+        }.start();
+
+        shotClockTimer = new CountDownTimer(mShotClockTimeLeftInMilli, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mShotClockTimeLeftInMilli = (int) millisUntilFinished;
+                updateShotClockTimerText();
+            }
+
+            @Override
+            public void onFinish() {
+                start();
+            }
+        }.start();
+    }
+
+    private void pauseTimers(){
+        isStarted = false;
+        mStartPauseBtn.setText(R.string.start_btn_text);
+        qrtrTimeTimer.cancel();
+        shotClockTimer.cancel();
+    }
+
+    private void updateShotClockTimerText(){
+        int shotClockSeconds = mShotClockTimeLeftInMilli /1000;
+        StringBuilder time = new StringBuilder();
+        time.append(":");
+        if (shotClockSeconds < 10){
+            time.append(0);
+            time.append(shotClockSeconds);
+        }else{
+            time.append(shotClockSeconds);
+        }
+        shotClk.setText(time);
+    }
+
+    private void updateQrtrTimeTimerText(){
+        int minutes = mQrtrTimeLeftInMilli/60000 ;
+        int seconds = mQrtrTimeLeftInMilli%60000/1000;
+        StringBuilder time = new StringBuilder();
+        time.append(minutes);
+        time.append(":");
+        if (seconds<10){
+            time.append(0);
+            time.append(seconds);
+        }else{
+            time.append(seconds);
+        }
+        qrtrTime.setText(time);
+    }
+
     private void reset(){
+        isStarted = false;
         updateHomeTeamScore(0);
         updateHomeTeamFouls(0);
         updateAwayTeamScore(0);
         updateAwayTeamFouls(0);
         currentQrtr = 1;
         updateQrtrText(currentQrtr);
-        qrtrTimeTimer.onTick(720000);
-        qrtrTimeTimer.start();
-        shotClockkTimer.onTick(24000);
-        shotClockkTimer.start();
+        qrtrTimeTimer.cancel();
+        mQrtrTimeLeftInMilli = INITIAL_QRTR_TIME;
+        updateQrtrTimeTimerText();
+        shotClockTimer.cancel();
+        mShotClockTimeLeftInMilli = INITIAL_SHOT_CLOCK_TIME;
+        updateShotClockTimerText();
+        mStartPauseBtn.setText(R.string.start_btn_text);
     }
 }
